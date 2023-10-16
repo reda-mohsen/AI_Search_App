@@ -1,6 +1,7 @@
 # AI Search Application
-#### Video Demo:  <URL HERE>
-#### Description: This application implements various search algorithms to find the optimal path between a start node and a goal node in a graph. The search algorithms implemented in this application include:
+## Video Demo:  <URL HERE>
+## Description:
+This application implements various search algorithms to find the optimal path between a start node and a goal node in a graph. The search algorithms implemented in this application include:
 * Breadth-First Search (BFS)
 * Depth-First Search (DFS)
 * Uniform-Cost Search (UCS)
