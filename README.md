@@ -15,7 +15,7 @@ After installing Python 3, you can install the necessary dependencies using pip.
 ```
 pip install -r requirements.txt
 ```
-This command will install all the dependencies listed in the requirements.txt file, including the tkinter, matplotlib, and networkx libraries.
+This command will install all the dependencies listed in the requirements.txt file.
 
 Once you have installed the dependencies, you can run the project by executing the project.py file.
 
