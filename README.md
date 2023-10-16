@@ -19,9 +19,7 @@ This command will install all the dependencies listed in the requirements.txt fi
 
 Once you have installed the dependencies, you can run the project by executing the project.py file.
 
-## Usage
-
-### Input restrictions
+## Input
 
 ## Output
 
