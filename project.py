@@ -18,18 +18,18 @@ def main():
 
 def get_input_graph():
     """
-     Prompt the user for input of graph edges with weights, validate the input, and return a list of graph edges.
+     prompt the user for input of graph edges with weights, validate the input, and return a list of graph edges.
 
-     This function ensures that the user-provided graph edges are correctly formatted as (node, node=weight),
+     this function ensures that the user-provided graph edges are correctly formatted as (node, node=weight),
      where 'node' can be any alphanumeric character, and 'weight' must be a non-negative integer. The input format
      should be 'edge1+edge2+edge3+...' where each 'edge' conforms to the format mentioned.
 
-     Returns: list of tuples: A list of graph edges represented as tuples, where each tuple consists of two nodes and
+     returns: list of tuples: A list of graph edges represented as tuples, where each tuple consists of two nodes and
      a dictionary with the 'weight' attribute.
 
-     Example:
+     example:
      >>> get_input_graph()
-     Enter edges with weights as (node,node=weight+node,node=weight): A, B=3+C, D=2
+     enter edges with weights as (node,node=weight+node,node=weight): A, B=3+C, D=2
      [('A', 'B', {'weight': '3'}), ('C', 'D', {'weight': '2'})]
 
      """
@@ -55,18 +55,50 @@ def get_input_graph():
 
 
 def get_graph(graph_edges: list):
-    try:
-        if graph_edges is not None:
-            graph = nx.DiGraph()
-            graph.add_edges_from(graph_edges)
-            return graph
-        else:
-            raise ValueError("Wrong graph edges")
-    except ValueError:
-        pass
+    """
+     create a directed graph from a list of graph edges.
+
+     args:
+     graph_edges (list of tuples): a list of graph edges represented as tuples, where each tuple consists of two nodes.
+
+     returns:
+     nx.DiGraph: a NetworkX Directed Graph object created from the provided graph edges.
+
+     Example:
+     >>> graph_edges = [('A', 'B', {'weight': '3'}), ('C', 'D', {'weight': '2'})]
+     >>> get_graph(graph_edges)
+     <networkx.classes.digraph.DiGraph object at 0x...>
+
+     """
+    # create an empty directed graph
+    graph = nx.DiGraph()
+    # add edges to the graph based on the provided list of graph_edges
+    graph.add_edges_from(graph_edges)
+    # return the resulting graph
+    return  graph
 
 
 def bfs(graph: nx.DiGraph, start_node: str, goal_nodes: list):
+    """
+    perform Breadth-First Search (BFS) on a directed graph to find a path from the start node to one of the goal nodes.
+
+    args:
+    graph (nx.DiGraph): a NetworkX Directed Graph object.
+    start_node (str): the starting node for BFS.
+    goal_nodes (list): a list of nodes to reach using BFS.
+
+    returns:
+    tuple or None: a tuple containing the cost and path if a path is found; otherwise, returns None.
+
+    example:
+    >>> graph = nx.DiGraph()
+    >>> graph.add_edges_from([('A', 'B', {'weight': 1}), ('A', 'C', {'weight': 2}), ('B', 'D', {'weight': 3})])
+    >>> start_node = 'A'
+    >>> goal_nodes = ['D', 'C']
+    >>> bfs(graph, start_node, goal_nodes)
+    (1, ['A', 'B', 'D'])
+
+    """
     try:
         # check if graph is empty
         if graph is None:
@@ -78,27 +110,57 @@ def bfs(graph: nx.DiGraph, start_node: str, goal_nodes: list):
         for node in goal_nodes:
             if not graph.has_node(node):
                 raise ValueError(f"Goal node {node} is not in graph")
-        # store the current node, cost, and path in a queue
+        # initialize a queue to store the current node, cost, and path
         fringe = [(start_node, 0, [start_node])]
-        # create a list of visited nodes in graph
+        # create a set to keep track of visited nodes
         visited = set()
         while fringe:
             node, cost, path = fringe.pop(0)
+            # if the current node is one of the goal nodes, return the cost and path to this goal node
             if node in goal_nodes:
+                # draw the graph and save the graph as png
                 draw_graph(graph, start_node, goal_nodes, path, cost, "BFS")
+                # return cost and path to this goal node
                 return cost, path
             visited.add(node)
+            # explore neighboring nodes
             for neighbor in graph.neighbors(node):
                 if neighbor not in visited:
                     new_cost = cost + int(graph[node][neighbor]['weight'])
                     new_path = path + [neighbor]
                     fringe.append((neighbor, new_cost, new_path))
+        # if no path is found, return None
         return None, None
     except ValueError as err:
         sys.exit(err)
 
 
 def draw_graph(graph: nx.DiGraph, start_node: str, goal_nodes: list, path: list, cost: int, search_algo):
+    """
+     draw and show a directed graph with specific node and edge attributes, and save it as a PNG file.
+
+     args:
+     graph (nx.DiGraph): a NetworkX Directed Graph object.
+     start_node (str): the starting node.
+     goal_nodes (list): a list of goal nodes.
+     path (list): a list of nodes representing the path.
+     cost (int): the cost of the path.
+     search_algo (str): the search algorithm used (e.g., "BFS").
+
+     returns:
+     None
+
+     example:
+     >>> graph = nx.DiGraph()
+     >>> graph.add_edges_from([('A', 'B', {'weight': 1}), ('A', 'C', {'weight': 2}), ('B', 'D', {'weight': 3})])
+     >>> start_node = 'A'
+     >>> goal_nodes = ['D']
+     >>> path = ['A', 'B', 'D']
+     >>> cost = 4
+     >>> search_algo = "BFS"
+     >>> draw_graph(G, start_node, goal_nodes, path, cost, search_algo)
+
+     """
     # set a layout for the graph
     pos = nx.spring_layout(graph, seed=43)  # Seed layout for graph reproducibility
     # set the node colors (red for start node, green for goal nodes and lightblue for the rest of nodes)
@@ -119,6 +181,8 @@ def draw_graph(graph: nx.DiGraph, start_node: str, goal_nodes: list, path: list,
         title += path_node + " "
     title += f"// Cost using {search_algo} is: " + str(cost)
     plt.suptitle(title.strip(), fontweight="bold")
+    # show the graph
+    plt.show()
     # save the graph in png format
     plt.savefig("graph.png")
 
