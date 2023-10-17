@@ -85,7 +85,7 @@ def bfs(graph: nx.DiGraph, start_node: str, goal_nodes: list):
         while fringe:
             node, cost, path = fringe.pop(0)
             if node in goal_nodes:
-                draw_graph(graph, start_node, goal_nodes, path, cost)
+                draw_graph(graph, start_node, goal_nodes, path, cost, "BFS")
                 return cost, path
             visited.add(node)
             for neighbor in graph.neighbors(node):
@@ -98,20 +98,28 @@ def bfs(graph: nx.DiGraph, start_node: str, goal_nodes: list):
         sys.exit(err)
 
 
-def draw_graph(graph, start_node: str, goal_nodes: list, path: list, cost: int):
-    pos = nx.spring_layout(graph, seed=43)  # Seed layout for -  gh reproducibility
+def draw_graph(graph: nx.DiGraph, start_node: str, goal_nodes: list, path: list, cost: int, search_algo):
+    # set a layout for the graph
+    pos = nx.spring_layout(graph, seed=43)  # Seed layout for graph reproducibility
+    # set the node colors (red for start node, green for goal nodes and lightblue for the rest of nodes)
     node_colors = ['red' if node == start_node
                    else 'green' if node in goal_nodes
                    else 'lightblue' for node in graph.nodes]
+    # set the edge color of the path in green and rest of edges in black
     edge_colors = ['green' if (u, v) in zip(path, path[1:]) else 'black' for u, v in graph.edges]
+    # draw the graph with labels as nodes
     nx.draw(graph, pos=pos, node_color=node_colors, node_size=500, edge_color=edge_colors, with_labels=True)
-    labels = nx.get_edge_attributes(graph, 'weight')
-    nx.draw_networkx_edge_labels(graph, pos, edge_labels=labels)
-    title = "Path using BFS is: "
+    # set edge labels with weights of edges
+    edge_labels = nx.get_edge_attributes(graph, 'weight')
+    # draw edge labels
+    nx.draw_networkx_edge_labels(graph, pos, edge_labels=edge_labels)
+    # set a title with the path and cost of the graph
+    title = f"Path using {search_algo} is: "
     for path_node in path:
         title += path_node + " "
-    title += "// Cost using BFS is: " + str(cost)
+    title += f"// Cost using {search_algo} is: " + str(cost)
     plt.suptitle(title.strip(), fontweight="bold")
+    # save the graph in png format
     plt.savefig("graph.png")
 
 
