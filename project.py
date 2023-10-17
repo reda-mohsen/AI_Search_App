@@ -181,10 +181,11 @@ def draw_graph(graph: nx.DiGraph, start_node: str, goal_nodes: list, path: list,
         title += path_node + " "
     title += f"// Cost using {search_algo} is: " + str(cost)
     plt.suptitle(title.strip(), fontweight="bold")
-    # show the graph
-    plt.show()
     # save the graph in png format
     plt.savefig("graph.png")
+    # show the graph
+    plt.show()
+
 
 
 if __name__ == "__main__":
