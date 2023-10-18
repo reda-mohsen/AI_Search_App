@@ -6,7 +6,7 @@ from PIL import Image
 import re
 
 
-def get_input_graph(input_edges):
+def get_input_edges(input_edges):
     """
      prompt the user for input of graph edges with weights, validate the input, and return a list of graph edges.
 

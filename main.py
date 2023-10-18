@@ -81,7 +81,7 @@ def output(cost_to_goal, path_to_goal):
 def on_button_selected():
     try:
         # call functions in graph.py to build the graph with provided graph edges
-        graph_edges = g.get_input_graph(input_edges_entry.get())
+        graph_edges = g.get_input_edges(input_edges_entry.get())
         graph = g.get_graph(graph_edges)
 
         # getting the start node from the user
