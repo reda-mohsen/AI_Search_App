@@ -26,7 +26,11 @@ def get_input_graph(input_entry):
 
      """
     # get graph edges concatenated with '+' from the user
-    input_graph_edges = input_entry.get().strip()
+    # input_graph_edges = input_entry.get().strip()
+
+    # for test purposes
+    input_graph_edges = input_entry.strip()
+
     # get a list of graph edges
     input_graph_edges = input_graph_edges.split("+")
     # create a list to store graph edges in a correct format
@@ -45,31 +49,30 @@ def get_input_graph(input_entry):
 
 
 def get_graph(graph_edges: list):
-    try:
-        """
-         create a directed graph from a list of graph edges.
+    """
+    create a directed graph from a list of graph edges.
+
+    args:
+    graph_edges (list of tuples): a list of graph edges represented as tuples,
+    where each tuple consists of two nodes.
     
-         args:
-         graph_edges (list of tuples): a list of graph edges represented as tuples,
-         where each tuple consists of two nodes.
+    returns:
+    nx.DiGraph: a NetworkX Directed Graph object created from the provided graph edges.
     
-         returns:
-         nx.DiGraph: a NetworkX Directed Graph object created from the provided graph edges.
-    
-         Example:
-         >>> graph_edges = [('A', 'B', {'weight': '3'}), ('C', 'D', {'weight': '2'})]
-         >>> get_graph(graph_edges)
-         <networkx.classes.digraph.DiGraph object at 0x...>
-    
-         """
+    Example:
+    >>> graph_edges = [('A', 'B', {'weight': '3'}), ('C', 'D', {'weight': '2'})]
+    >>> get_graph(graph_edges)
+    <networkx.classes.digraph.DiGraph object at 0x...>
+    """
+    if graph_edges:
         # create an empty directed graph
         graph = nx.DiGraph()
         # add edges to the graph based on the provided list of graph_edges
         graph.add_edges_from(graph_edges)
         # return the resulting graph
         return graph
-    except TypeError:
-        pass
+    else:
+        raise ValueError("No graph edges provided")
 
 
 def bfs(graph: nx.DiGraph, start_node: str, goal_nodes: list):
