@@ -1,8 +1,9 @@
+# Name: Reda Mohsen Reda
+# Project Title: AI Search Algorithms Application
 import networkx as nx
 import matplotlib.pyplot as plt
+from PIL import Image
 import re
-import sys
-from tkinter import messagebox
 
 
 def get_input_graph(input_entry):
@@ -148,6 +149,8 @@ def draw_graph(graph: nx.DiGraph, start_node: str, goal_nodes: list, path: list,
      >>> draw_graph(graph, start_node, goal_nodes, path, cost, search_algo)
 
      """
+    # close previous fig if any
+    plt.close()
     # set a layout for the graph
     pos = nx.spring_layout(graph, seed=43)  # Seed layout for graph reproducibility
     # set the node colors (red for start node, green for goal nodes and light blue for the rest of nodes)
@@ -168,7 +171,10 @@ def draw_graph(graph: nx.DiGraph, start_node: str, goal_nodes: list, path: list,
     title += separator.join(path) + "\n"
     title += f"Cost using {search_algo} is: {cost}"
     plt.suptitle(title.strip(), fontweight="bold")
-    # save the graph in png format
+    # save graph figure
     plt.savefig("graph.png")
-    # show the graph
+    # show the figure
     plt.show()
+    # Open and display the saved figure
+    # img = Image.open("graph.png")
+    # img.show()
