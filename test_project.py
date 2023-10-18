@@ -1,15 +1,15 @@
 import pytest
 import networkx as nx
-from graph import get_input_graph, get_graph, bfs, dfs, ucs
+from graph import get_input_edges, get_graph, bfs, dfs, ucs
 
 
 def test_get_input_graph():
-    assert get_input_graph("A, B=3+C, D=2") == [('A', 'B', {'weight': '3'}), ('C', 'D', {'weight': '2'})]
+    assert get_input_edges("A, B=3+C, D=2") == [('A', 'B', {'weight': '3'}), ('C', 'D', {'weight': '2'})]
     with pytest.raises(ValueError):
-        get_input_graph("")
-        get_input_graph("A,B=1 - A,C=4")
-        get_input_graph("A B = 1 + A,C=4")
-        get_input_graph("A B - 1 + A,C=4")
+        get_input_edges("")
+        get_input_edges("A,B=1 - A,C=4")
+        get_input_edges("A B = 1 + A,C=4")
+        get_input_edges("A B - 1 + A,C=4")
 
 
 def test_get_graph():
