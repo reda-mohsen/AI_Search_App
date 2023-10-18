@@ -6,7 +6,7 @@ from PIL import Image
 import re
 
 
-def get_input_graph(input_entry):
+def get_input_graph(input_edges):
     """
      prompt the user for input of graph edges with weights, validate the input, and return a list of graph edges.
 
@@ -26,10 +26,7 @@ def get_input_graph(input_entry):
 
      """
     # get graph edges concatenated with '+' from the user
-    # input_graph_edges = input_entry.get().strip()
-
-    # for test purposes
-    input_graph_edges = input_entry.strip()
+    input_graph_edges = input_edges.strip()
 
     # get a list of graph edges
     input_graph_edges = input_graph_edges.split("+")
