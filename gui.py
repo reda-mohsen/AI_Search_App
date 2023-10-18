@@ -42,7 +42,7 @@ input_search_algorithm_label = tk.Label(frame_input, text="Select search algorit
 # Add the label widget to the window
 input_search_algorithm_label.pack()
 # Create an Option Menu Widget with search algorithms
-options = ["BFS", "Option 2", "Option 3", "Option 4"]
+options = ["BFS", "DFS", "UCS"]
 selected_option = tk.StringVar()
 selected_option.set(options[0])  # Set the default option
 option_var = tk.StringVar()
@@ -95,11 +95,21 @@ def on_button_selected():
                 goal_nodes.append(node.strip())
         else:
             raise ValueError("Empty goal nodes")
+        selected_option.set(option_var.get())
         selected_algorithm = selected_option.get()
         if selected_algorithm == "BFS":
             cost_to_goal, path_to_goal = g.bfs(graph, start_node, goal_nodes)
             output(cost_to_goal, path_to_goal)
             g.draw_graph(graph, start_node, goal_nodes, path_to_goal, cost_to_goal, selected_algorithm)
+        elif selected_algorithm == "DFS":
+            cost_to_goal, path_to_goal = g.dfs(graph, start_node, goal_nodes)
+            output(cost_to_goal, path_to_goal)
+            g.draw_graph(graph, start_node, goal_nodes, path_to_goal, cost_to_goal, selected_algorithm)
+        elif selected_algorithm == "UCS":
+            cost_to_goal, path_to_goal = g.ucs(graph, start_node, goal_nodes)
+            output(cost_to_goal, path_to_goal)
+            g.draw_graph(graph, start_node, goal_nodes, path_to_goal, cost_to_goal, selected_algorithm)
+
     except ValueError as value_err:
         print(value_err)
         messagebox.showerror("Error", value_err)

@@ -98,7 +98,7 @@ def bfs(graph: nx.DiGraph, start_node: str, goal_nodes: list):
         raise ValueError("Empty graph")
     # check if start node is not in graph
     if not graph.has_node(start_node):
-        raise ValueError("Start node is not in graph")
+        raise ValueError(f"Start node {start_node} is not in graph")
     # check if a goal node is not in graph
     for node in goal_nodes:
         if not graph.has_node(node):
@@ -122,6 +122,114 @@ def bfs(graph: nx.DiGraph, start_node: str, goal_nodes: list):
                 fringe.append((neighbor, new_cost, new_path))
     # if no path is found, return None
     return None, None
+
+def dfs(graph: nx.DiGraph, start_node: str, goal_nodes: list):
+    """
+    perform Depth-First Search (DFS) on a directed graph to find a path from the start node to one of the goal nodes.
+
+    args:
+    graph (nx.DiGraph): a NetworkX Directed Graph object.
+    start_node (str): the starting node for BFS.
+    goal_nodes (list): a list of nodes to reach using BFS.
+
+    returns:
+    tuple or None: a tuple containing the cost and path if a path is found; otherwise, returns None.
+
+    example:
+    >>> graph = nx.DiGraph()
+    >>> graph.add_edges_from([('A', 'B', {'weight': 1}), ('A', 'C', {'weight': 2}), ('B', 'D', {'weight': 3})])
+    >>> start_node = 'A'
+    >>> goal_nodes = ['D', 'C']
+    >>> dfs(graph, start_node, goal_nodes)
+    (1, ['A', 'B', 'D'])
+    """
+
+    # check if graph is empty
+    if graph is None:
+        raise ValueError("Empty graph")
+    # check if start node is not in graph
+    if not graph.has_node(start_node):
+        raise ValueError(f"Start node {start_node} is not in graph")
+    # check if a goal node is not in graph
+    for node in goal_nodes:
+        if not graph.has_node(node):
+            raise ValueError(f"Goal node {node} is not in graph")
+    # initialize a queue to store the current node, cost, and path
+    fringe = [(start_node, 0, [start_node])]
+    # create a set to keep track of visited nodes
+    visited = set()
+    while fringe:
+        node, cost, path = fringe.pop()
+        # if the current node is one of the goal nodes, return the cost and path to this goal node
+        if node in goal_nodes:
+            # return cost and path to this goal node
+            return cost, path
+        visited.add(node)
+        # explore neighboring nodes
+        for neighbor in graph.neighbors(node):
+            if neighbor not in visited:
+                new_cost = cost + int(graph[node][neighbor]['weight'])
+                new_path = path + [neighbor]
+                fringe.append((neighbor, new_cost, new_path))
+    # if no path is found, return None
+    return None, None
+
+
+def ucs(graph, start_node, goal_nodes):
+    """
+    perform Uniform Cost Search (UCS) on a directed graph to find the lowest cost path from the start node to the goal node.
+
+    args:
+    graph (nx.DiGraph): a NetworkX Directed Graph object with non-negative edge weights.
+    start_node (str): the starting node for UCS.
+    goal_node (str): the goal node to reach.
+
+    returns:
+    tuple or None: a tuple containing the cost and path if a path is found; otherwise, returns None.
+
+    example:
+    >>> graph = nx.DiGraph()
+    >>> graph.add_weighted_edges_from([('A', 'B', 1), ('A', 'C', 2), ('B', 'D', 3), ('C', 'D', 1)])
+    >>> start_node = 'A'
+    >>> goal_node = 'D'
+    >>> ucs(graph, start_node, goal_node)
+    (4, ['A', 'C', 'D'])
+    """
+    # check if graph is empty
+    if graph is None:
+        raise ValueError("Empty graph")
+    # check if start node is not in graph
+    if not graph.has_node(start_node):
+        raise ValueError(f"Start node {start_node} is not in graph")
+    # check if a goal node is not in graph
+    for node in goal_nodes:
+        if not graph.has_node(node):
+            raise ValueError(f"Goal node {node} is not in graph")
+    # initialize a list (fringe) to store the current node, cost, and path
+    fringe = [(0, start_node, [start_node])]
+
+    while fringe:
+        # find the path with the minimum cost in the fringe
+        min_index = min(range(len(fringe)), key=lambda i: fringe[i][0])
+        cost, node, path = fringe.pop(min_index)
+
+        if node in goal_nodes:
+            # if we've reached the goal node, return the cost and path
+            return cost, path
+
+        # explore neighboring nodes
+        for neighbor in graph.neighbors(node):
+            new_cost = cost + int(graph[node][neighbor]['weight'])
+
+            # check if this node has already been visited with a lower cost
+            if all(new_cost >= c for c, _, _ in fringe):
+                # If not, add it to the fringe
+                new_path = path + [neighbor]
+                fringe.append((new_cost, neighbor, new_path))
+
+    # if no path is found, return None
+    return None, None
+
 
 def draw_graph(graph: nx.DiGraph, start_node: str, goal_nodes: list, path: list, cost: int, search_algo):
     """
