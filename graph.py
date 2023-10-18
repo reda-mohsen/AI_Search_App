@@ -39,7 +39,6 @@ def get_input_graph(input_entry):
         else:
             # Display a message box for invalid input
             raise ValueError("Invalid edges")
-            return None
     # return list of graph edges
     if len(graph_edges) == len(input_graph_edges):
         return graph_edges
@@ -51,7 +50,8 @@ def get_graph(graph_edges: list):
          create a directed graph from a list of graph edges.
     
          args:
-         graph_edges (list of tuples): a list of graph edges represented as tuples, where each tuple consists of two nodes.
+         graph_edges (list of tuples): a list of graph edges represented as tuples,
+         where each tuple consists of two nodes.
     
          returns:
          nx.DiGraph: a NetworkX Directed Graph object created from the provided graph edges.
@@ -71,6 +71,7 @@ def get_graph(graph_edges: list):
     except TypeError:
         pass
 
+
 def bfs(graph: nx.DiGraph, start_node: str, goal_nodes: list):
     """
     perform Breadth-First Search (BFS) on a directed graph to find a path from the start node to one of the goal nodes.
@@ -84,15 +85,13 @@ def bfs(graph: nx.DiGraph, start_node: str, goal_nodes: list):
     tuple or None: a tuple containing the cost and path if a path is found; otherwise, returns None.
 
     example:
-    >>> graph = nx.DiGraph()
-    >>> graph.add_edges_from([('A', 'B', {'weight': 1}), ('A', 'C', {'weight': 2}), ('B', 'D', {'weight': 3})])
-    >>> start_node = 'A'
-    >>> goal_nodes = ['D', 'C']
-    >>> bfs(graph, start_node, goal_nodes)
+    >>> G = nx.DiGraph()
+    >>> G.add_edges_from([('A', 'B', {'weight': 1}), ('A', 'C', {'weight': 2}), ('B', 'D', {'weight': 3})])
+    >>> s_node = 'A'
+    >>> g_nodes = ['D', 'C']
+    >>> bfs(G, s_node, g_nodes)
     (1, ['A', 'B', 'D'])
-
     """
-
     # check if graph is empty
     if graph is None:
         raise ValueError("Empty graph")
@@ -123,6 +122,7 @@ def bfs(graph: nx.DiGraph, start_node: str, goal_nodes: list):
     # if no path is found, return None
     return None, None
 
+
 def dfs(graph: nx.DiGraph, start_node: str, goal_nodes: list):
     """
     perform Depth-First Search (DFS) on a directed graph to find a path from the start node to one of the goal nodes.
@@ -136,14 +136,13 @@ def dfs(graph: nx.DiGraph, start_node: str, goal_nodes: list):
     tuple or None: a tuple containing the cost and path if a path is found; otherwise, returns None.
 
     example:
-    >>> graph = nx.DiGraph()
-    >>> graph.add_edges_from([('A', 'B', {'weight': 1}), ('A', 'C', {'weight': 2}), ('B', 'D', {'weight': 3})])
-    >>> start_node = 'A'
-    >>> goal_nodes = ['D', 'C']
-    >>> dfs(graph, start_node, goal_nodes)
+    >>> G = nx.DiGraph()
+    >>> G.add_edges_from([('A', 'B', {'weight': 1}), ('A', 'C', {'weight': 2}), ('B', 'D', {'weight': 3})])
+    >>> s_node = 'A'
+    >>> g_nodes = ['D', 'C']
+    >>> dfs(G, s_node, g_nodes)
     (1, ['A', 'B', 'D'])
     """
-
     # check if graph is empty
     if graph is None:
         raise ValueError("Empty graph")
@@ -177,7 +176,8 @@ def dfs(graph: nx.DiGraph, start_node: str, goal_nodes: list):
 
 def ucs(graph, start_node, goal_nodes):
     """
-    perform Uniform Cost Search (UCS) on a directed graph to find the lowest cost path from the start node to the goal node.
+    perform Uniform Cost Search (UCS) on a directed graph to find the lowest cost path
+    from the start node to the goal node.
 
     args:
     graph (nx.DiGraph): a NetworkX Directed Graph object with non-negative edge weights.
@@ -188,11 +188,11 @@ def ucs(graph, start_node, goal_nodes):
     tuple or None: a tuple containing the cost and path if a path is found; otherwise, returns None.
 
     example:
-    >>> graph = nx.DiGraph()
-    >>> graph.add_weighted_edges_from([('A', 'B', 1), ('A', 'C', 2), ('B', 'D', 3), ('C', 'D', 1)])
-    >>> start_node = 'A'
-    >>> goal_node = 'D'
-    >>> ucs(graph, start_node, goal_node)
+    >>> G = nx.DiGraph()
+    >>> G.add_weighted_edges_from([('A', 'B', 1), ('A', 'C', 2), ('B', 'D', 3), ('C', 'D', 1)])
+    >>> s_node = 'A'
+    >>> g_nodes = 'D'
+    >>> ucs(G , s_node, g_nodes)
     (4, ['A', 'C', 'D'])
     """
     # check if graph is empty
@@ -247,14 +247,14 @@ def draw_graph(graph: nx.DiGraph, start_node: str, goal_nodes: list, path: list,
      None
 
      example:
-     >>> graph = nx.DiGraph()
-     >>> graph.add_edges_from([('A', 'B', {'weight': 1}), ('A', 'C', {'weight': 2}), ('B', 'D', {'weight': 3})])
-     >>> start_node = 'A'
-     >>> goal_nodes = ['D']
-     >>> path = ['A', 'B', 'D']
-     >>> cost = 4
-     >>> search_algo = "BFS"
-     >>> draw_graph(graph, start_node, goal_nodes, path, cost, search_algo)
+     >>> G = nx.DiGraph()
+     >>> G.add_edges_from([('A', 'B', {'weight': 1}), ('A', 'C', {'weight': 2}), ('B', 'D', {'weight': 3})])
+     >>> s_node = 'A'
+     >>> g_nodes = ['D']
+     >>> e_path = ['A', 'B', 'D']
+     >>> e_cost = 4
+     >>> e_search_algo = "BFS"
+     >>> draw_graph(G, s_node, g_nodes, e_path, e_cost, e_search_algo)
 
      """
     # close previous fig if any
@@ -266,7 +266,7 @@ def draw_graph(graph: nx.DiGraph, start_node: str, goal_nodes: list, path: list,
                    else 'green' if node in goal_nodes
                    else 'lightblue' for node in graph.nodes]
     # set the edge color of the path in green and rest of edges in black
-    edge_colors = ['green' if (u, v) in zip(path, path[1:]) else 'black' for u, v in graph.edges]
+    edge_colors = ['orange' if (u, v) in zip(path, path[1:]) else 'black' for u, v in graph.edges]
     # draw the graph with labels as nodes
     nx.draw(graph, pos=pos, node_color=node_colors, node_size=500, edge_color=edge_colors, with_labels=True)
     # set edge labels with weights of edges
@@ -278,7 +278,7 @@ def draw_graph(graph: nx.DiGraph, start_node: str, goal_nodes: list, path: list,
     separator = " -> "
     title += separator.join(path) + "\n"
     title += f"Cost using {search_algo} is: {cost}"
-    plt.suptitle(title.strip(), fontweight="bold")
+    plt.suptitle(title.strip(), x=0.7, y=0.1, fontweight="bold")
     # save graph figure
     plt.savefig("graph.png")
     # show the figure
