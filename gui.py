@@ -46,7 +46,7 @@ options = ["BFS", "DFS", "UCS"]
 selected_option = tk.StringVar()
 selected_option.set(options[0])  # Set the default option
 option_var = tk.StringVar()
-option_menu = tk.OptionMenu(frame_input, option_var, *options)    # command=on_option_selected
+option_menu = tk.OptionMenu(frame_input, option_var, *options)
 option_menu.pack()
 # Set the default value in the OptionMenu
 option_var.set(selected_option.get())
@@ -64,7 +64,8 @@ def output(cost_to_goal, path_to_goal):
     # Add the label widget to the window
     path_to_goal_label.grid(row=0, column=0)
     # Create a label widget
-    path_to_goal = tk.Label(frame_output, text=path_to_goal, padx=10, pady=10)
+    separator = " -> "
+    path_to_goal = tk.Label(frame_output, text=separator.join(path_to_goal), padx=10, pady=10)
     # Add the label widget to the window
     path_to_goal.grid(row=0, column=1)
 
@@ -82,11 +83,13 @@ def on_button_selected():
         # call functions in graph.py to build the graph with provided graph edges
         graph_edges = g.get_input_graph(input_edges_entry)
         graph = g.get_graph(graph_edges)
+
         # getting the start node from the user
         if start_node_entry.get():
             start_node = start_node_entry.get()
         else:
             raise ValueError("Empty start node")
+
         # getting the goal nodes from the user and put the nodes in a list
         if goal_nodes_entry.get():
             goal_nodes = []
@@ -95,20 +98,30 @@ def on_button_selected():
                 goal_nodes.append(node.strip())
         else:
             raise ValueError("Empty goal nodes")
+
         selected_option.set(option_var.get())
         selected_algorithm = selected_option.get()
         if selected_algorithm == "BFS":
             cost_to_goal, path_to_goal = g.bfs(graph, start_node, goal_nodes)
-            output(cost_to_goal, path_to_goal)
-            g.draw_graph(graph, start_node, goal_nodes, path_to_goal, cost_to_goal, selected_algorithm)
+            if path_to_goal:
+                output(cost_to_goal, path_to_goal)
+                g.draw_graph(graph, start_node, goal_nodes, path_to_goal, cost_to_goal, selected_algorithm)
+            else:
+                raise ValueError("Cannot reach path")
         elif selected_algorithm == "DFS":
             cost_to_goal, path_to_goal = g.dfs(graph, start_node, goal_nodes)
-            output(cost_to_goal, path_to_goal)
-            g.draw_graph(graph, start_node, goal_nodes, path_to_goal, cost_to_goal, selected_algorithm)
+            if path_to_goal:
+                output(cost_to_goal, path_to_goal)
+                g.draw_graph(graph, start_node, goal_nodes, path_to_goal, cost_to_goal, selected_algorithm)
+            else:
+                raise ValueError("Cannot reach path")
         elif selected_algorithm == "UCS":
             cost_to_goal, path_to_goal = g.ucs(graph, start_node, goal_nodes)
-            output(cost_to_goal, path_to_goal)
-            g.draw_graph(graph, start_node, goal_nodes, path_to_goal, cost_to_goal, selected_algorithm)
+            if path_to_goal:
+                output(cost_to_goal, path_to_goal)
+                g.draw_graph(graph, start_node, goal_nodes, path_to_goal, cost_to_goal, selected_algorithm)
+            else:
+                raise ValueError("Cannot reach path")
 
     except ValueError as value_err:
         print(value_err)
