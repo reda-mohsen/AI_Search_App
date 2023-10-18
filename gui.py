@@ -1,3 +1,5 @@
+# Name: Reda Mohsen Reda
+# Project Title: AI Search Algorithms Application
 import tkinter as tk
 import graph as g
 from tkinter import messagebox
@@ -85,7 +87,7 @@ def on_button_selected():
             start_node = start_node_entry.get()
         else:
             raise ValueError("Empty start node")
-        # getting the goal nodes from the user and put tthe nodes in a list
+        # getting the goal nodes from the user and put the nodes in a list
         if goal_nodes_entry.get():
             goal_nodes = []
             input_goal_nodes = goal_nodes_entry.get().split(",")
@@ -97,6 +99,7 @@ def on_button_selected():
         if selected_algorithm == "BFS":
             cost_to_goal, path_to_goal = g.bfs(graph, start_node, goal_nodes)
             output(cost_to_goal, path_to_goal)
+            g.draw_graph(graph, start_node, goal_nodes, path_to_goal, cost_to_goal, selected_algorithm)
     except ValueError as value_err:
         print(value_err)
         messagebox.showerror("Error", value_err)
