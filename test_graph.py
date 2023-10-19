@@ -39,5 +39,39 @@ def test_bfs():
         bfs(graph, start_node, goal_nodes)
 
 
+def test_dfs():
+    graph = nx.DiGraph()
+    graph.add_edges_from([('A', 'B', {'weight': 1}), ('A', 'C', {'weight': 2}), ('B', 'D', {'weight': 3})])
+    start_node = 'A'
+    goal_nodes = ['D', 'C']
+    cost, path = dfs(graph, start_node, goal_nodes)
+    assert cost == 2
+    assert path == ['A', 'C']
+    graph = nx.DiGraph()
+    with pytest.raises(ValueError):
+        start_node = ""
+        dfs(graph, start_node, goal_nodes)
+        start_node = 'A'
+        goal_nodes = ['']
+        dfs(graph, start_node, goal_nodes)
+
+
+def test_ucs():
+    graph = nx.DiGraph()
+    graph.add_edges_from([('A', 'B', {'weight': 1}), ('A', 'C', {'weight': 2}), ('B', 'D', {'weight': 3}), ('C', 'D', {'weight': 3})])
+    start_node = 'A'
+    goal_nodes = ['D']
+    cost, path = ucs(graph, start_node, goal_nodes)
+    assert cost == 4
+    assert path == ['A', 'B', 'D']
+    graph = nx.DiGraph()
+    with pytest.raises(ValueError):
+        start_node = ""
+        ucs(graph, start_node, goal_nodes)
+        start_node = 'A'
+        goal_nodes = ['']
+        ucs(graph, start_node, goal_nodes)
+
+
 if __name__ == '__main__':
     pytest.main()
