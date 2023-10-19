@@ -14,7 +14,8 @@ frame_output = tk.Frame(root, padx=10, pady=10)
 frame_output.pack()
 
 # Create a label widget
-input_edges_label = tk.Label(frame_input, text="Enter edges with weights as (node,node=weight+node,node=weight): ", padx=10, pady=10)
+input_edges_label = tk.Label(frame_input,
+                             text="Enter edges with weights as (node,node=weight+node,node=weight): ", padx=10, pady=10)
 # Add the label widget to the window
 input_edges_label.pack()
 # Create an Entry widget within the Frame to get input edges
@@ -42,7 +43,7 @@ input_search_algorithm_label = tk.Label(frame_input, text="Select search algorit
 # Add the label widget to the window
 input_search_algorithm_label.pack()
 # Create an Option Menu Widget with search algorithms
-options = ["BFS", "DFS", "UCS"]
+options = ["BFS", "DFS", "UCS", "Greedy"]
 selected_option = tk.StringVar()
 selected_option.set(options[0])  # Set the default option
 option_var = tk.StringVar()
@@ -57,6 +58,7 @@ tk.Label(frame_input, text="").pack()
 # Create a margin between the Button and the Output
 tk.Label(frame_input, text="").pack()
 tk.Label(frame_input, text="").pack()
+
 
 def output(cost_to_goal, path_to_goal):
     # Create a label widget
@@ -77,6 +79,7 @@ def output(cost_to_goal, path_to_goal):
     cost_to_goal = tk.Label(frame_output, text=cost_to_goal, padx=10, pady=10)
     # Add the label widget to the window
     cost_to_goal.grid(row=1, column=1)
+
 
 def on_button_selected():
     try:
@@ -122,6 +125,13 @@ def on_button_selected():
                 g.draw_graph(graph, start_node, goal_nodes, path_to_goal, cost_to_goal, selected_algorithm)
             else:
                 raise ValueError("Cannot reach path")
+        elif selected_algorithm == "Greedy":
+            cost_to_goal, path_to_goal = g.greedy_search(graph, start_node, goal_nodes)
+            if path_to_goal:
+                output(cost_to_goal, path_to_goal)
+                g.draw_graph(graph, start_node, goal_nodes, path_to_goal, cost_to_goal, selected_algorithm)
+            else:
+                raise ValueError("Cannot reach path")
 
     except ValueError as value_err:
         print(value_err)
@@ -131,6 +141,7 @@ def on_button_selected():
         print(type_err)
         messagebox.showerror("Error", type_err)
         pass
+
 
 # Create a Button widget within the Frame to start search
 button = tk.Button(frame_input, text="Search", padx=30, command=on_button_selected)

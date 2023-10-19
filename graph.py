@@ -20,7 +20,7 @@ def get_input_edges(input_edges):
      a dictionary with the 'weight' attribute.
 
      example:
-     >>> get_input_graph()
+     >>> get_input_edges()
      enter edges with weights as (node,node=weight+node,node=weight): A, B=3+C, D=2
      [('A', 'B', {'weight': '3'}), ('C', 'D', {'weight': '2'})]
 
@@ -174,7 +174,7 @@ def dfs(graph: nx.DiGraph, start_node: str, goal_nodes: list):
     return None, None
 
 
-def ucs(graph, start_node, goal_nodes):
+def ucs(graph: nx.DiGraph, start_node: str, goal_nodes: list):
     """
     perform Uniform Cost Search (UCS) on a directed graph to find the lowest cost path
     from the start node to the goal node.
@@ -230,6 +230,66 @@ def ucs(graph, start_node, goal_nodes):
     # if no path is found, return None
     return None, None
 
+def greedy_search(graph: nx.DiGraph, start_node: str, goal_nodes: list):
+    """
+    perform Greedy Search on a graph to find a path from the start_node to one of the goal_nodes.
+
+    args:
+    graph: The graph to search in.
+    start_node: The starting node.
+    goal_nodes: A list of nodes to reach using Greedy Search.
+
+    returns:
+    tuple or None: A tuple containing the cost and path if a path is found; otherwise, returns None.
+    """
+    # check if graph is empty
+    if graph is None:
+        raise ValueError("Empty graph")
+    # check if start node is not in graph
+    if not graph.has_node(start_node):
+        raise ValueError(f"Start node {start_node} is not in the graph")
+    # check if a goal node is not in graph
+    for node in goal_nodes:
+        if not graph.has_node(node):
+            raise ValueError(f"Goal node {node} is not in the graph")
+
+    # initialize a priority queue to store the current node, cost, and path.
+    fringe = [(0, start_node, [start_node])]
+
+    def heuristic(node: str, goal_nodes: list):
+        """
+        heuristic function for Greedy Search.
+
+        args:
+        node: The current node.
+        goal_nodes: A list of goal nodes.
+
+        returns:
+        int: The heuristic value for the given node.
+        """
+        # In this example, the heuristic function returns 0 if the node is a goal node, else a large value.
+        if node in goal_nodes:
+            return 0
+        else:
+            return float('inf')
+
+    while fringe:
+        # sort the fringe based on a heuristic value (greedy criterion).
+        fringe.sort(key=lambda x: heuristic(x[1], goal_nodes))
+        cost, node, path = fringe.pop(0)
+
+        if node in goal_nodes:
+            return cost, path
+
+        # explore neighboring nodes.
+        for neighbor in graph.neighbors(node):
+            new_cost = cost + int(graph[node][neighbor]['weight'])
+            new_path = path + [neighbor]
+            fringe.append((new_cost, neighbor, new_path))
+
+    # if no path is found, return None
+    return None, None
+
 
 def draw_graph(graph: nx.DiGraph, start_node: str, goal_nodes: list, path: list, cost: int, search_algo):
     """
@@ -260,7 +320,7 @@ def draw_graph(graph: nx.DiGraph, start_node: str, goal_nodes: list, path: list,
     # close previous fig if any
     plt.close()
     # set a layout for the graph
-    pos = nx.spring_layout(graph, seed=43)  # Seed layout for graph reproducibility
+    pos = nx.spring_layout(graph, seed=57)  # Seed layout for graph reproducibility
     # set the node colors (red for start node, green for goal nodes and light blue for the rest of nodes)
     node_colors = ['red' if node == start_node
                    else 'green' if node in goal_nodes
@@ -273,12 +333,10 @@ def draw_graph(graph: nx.DiGraph, start_node: str, goal_nodes: list, path: list,
     edge_labels = nx.get_edge_attributes(graph, 'weight')
     # draw edge labels
     nx.draw_networkx_edge_labels(graph, pos, edge_labels=edge_labels)
-    # set a title with the path and cost of the graph
-    title = f"Path using {search_algo} is: "
-    separator = " -> "
-    title += separator.join(path) + "\n"
-    title += f"Cost using {search_algo} is: {cost}"
-    plt.suptitle(title.strip(), x=0.7, y=0.1, fontweight="bold")
+    # Construct a concise and informative title
+    title = f"{search_algo}\nPath: {' -> '.join(path)}\nCost: {cost}"
+    # Add the title as text annotation above the graph
+    plt.annotate(title, (0.2, 0.8), xycoords='axes fraction', fontsize=12, ha='center', fontweight="bold")
     # save graph figure
     plt.savefig("graph.png")
     # show the figure
