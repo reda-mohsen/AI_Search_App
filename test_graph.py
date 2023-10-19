@@ -76,12 +76,13 @@ def test_ucs():
 def test_greedy():
     graph = nx.DiGraph()
     graph.add_edges_from([('A', 'B', {'weight': 1}), ('A', 'C', {'weight': 2}),
-                          ('B', 'D', {'weight': 3}), ('C', 'D', {'weight': 3})])
+                          ('B', 'D', {'weight': 3}), ('C', 'D', {'weight': 3}),
+                          ('B', 'E', {'weight': 1})])
     start_node = 'A'
-    goal_nodes = ['D']
+    goal_nodes = ['D', 'E']
     cost, path = greedy_search(graph, start_node, goal_nodes)
-    assert cost == 4
-    assert path == ['A', 'B', 'D']
+    assert cost == 2
+    assert path == ['A', 'B', 'E']
     graph = nx.DiGraph()
     with pytest.raises(ValueError):
         start_node = ""

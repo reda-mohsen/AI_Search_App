@@ -230,64 +230,67 @@ def ucs(graph: nx.DiGraph, start_node: str, goal_nodes: list):
     # if no path is found, return None
     return None, None
 
-def greedy_search(graph: nx.DiGraph, start_node: str, goal_nodes: list):
+
+def greedy_search(graph, start_node, goal_nodes):
     """
-    perform Greedy Search on a graph to find a path from the start_node to one of the goal_nodes.
+    perform Greedy Search on a graph to find the path and cost to one of the goal nodes.
 
     args:
-    graph: The graph to search in.
-    start_node: The starting node.
-    goal_nodes: A list of nodes to reach using Greedy Search.
+    graph (nx.Graph): a NetworkX Graph object.
+    start_node (str): the starting node for the search.
+    goal_nodes (list): a list of nodes to reach during the search.
 
     returns:
-    tuple or None: A tuple containing the cost and path if a path is found; otherwise, returns None.
+    tuple or None: a tuple containing the cost and path if a path to a goal node is found; otherwise, returns None.
+
+    example:
+    >>> G = nx.Graph()
+    >>> G.add_edge('A', 'B', weight=2)
+    >>> G.add_edge('A', 'C', weight=1)
+    >>> G.add_edge('B', 'D', weight=3)
+    >>> s_node = 'A'
+    >>> g_nodes = ['D', 'C']
+    >>> greedy_search(G, s_node, g_nodes)
+    (1, ['A', 'C'])
     """
-    # check if graph is empty
+    # Check if graph is empty
     if graph is None:
         raise ValueError("Empty graph")
-    # check if start node is not in graph
+    # Check if start node is not in graph
     if not graph.has_node(start_node):
-        raise ValueError(f"Start node {start_node} is not in the graph")
-    # check if a goal node is not in graph
+        raise ValueError(f"Start node {start_node} is not in graph")
+    # Check if a goal node is not in graph
     for node in goal_nodes:
         if not graph.has_node(node):
-            raise ValueError(f"Goal node {node} is not in the graph")
+            raise ValueError(f"Goal node {node} is not in graph")
 
-    # initialize a priority queue to store the current node, cost, and path.
-    fringe = [(0, start_node, [start_node])]
-
-    def heuristic(node: str, goal_nodes: list):
-        """
-        heuristic function for Greedy Search.
-
-        args:
-        node: The current node.
-        goal_nodes: A list of goal nodes.
-
-        returns:
-        int: The heuristic value for the given node.
-        """
-        # In this example, the heuristic function returns 0 if the node is a goal node, else a large value.
-        if node in goal_nodes:
-            return 0
-        else:
-            return float('inf')
+    # Initialize a priority queue to store the current node, cost, and path
+    fringe = [(start_node, 0, [start_node])]
+    # Create a set to keep track of visited nodes
+    visited = set()
 
     while fringe:
-        # sort the fringe based on a heuristic value (greedy criterion).
-        fringe.sort(key=lambda x: heuristic(x[1], goal_nodes))
-        cost, node, path = fringe.pop(0)
+        node, cost, path = fringe.pop()
 
+        # If the current node is one of the goal nodes, return the cost and path to this goal node
         if node in goal_nodes:
+            # Return cost and path to this goal node
             return cost, path
 
-        # explore neighboring nodes.
-        for neighbor in graph.neighbors(node):
-            new_cost = cost + int(graph[node][neighbor]['weight'])
-            new_path = path + [neighbor]
-            fringe.append((new_cost, neighbor, new_path))
+        visited.add(node)
 
-    # if no path is found, return None
+        # Explore neighboring nodes
+        neighbors = list(graph.neighbors(node))
+        unvisited_neighbors = [(neighbor, graph[node][neighbor]['weight']) for neighbor in neighbors if neighbor not in visited]
+
+        if unvisited_neighbors:
+            unvisited_neighbors.sort(key=lambda x: x[1])
+            next_node, edge_cost = unvisited_neighbors[0]
+            new_cost = cost + int(edge_cost)
+            new_path = path + [next_node]
+            fringe.append((next_node, new_cost, new_path))
+
+    # If no path to any goal node is found, return None
     return None, None
 
 
