@@ -77,7 +77,7 @@ def test_greedy():
     graph = nx.DiGraph()
     graph.add_edges_from([('A', 'B', {'weight': 1}), ('A', 'C', {'weight': 2}),
                           ('B', 'D', {'weight': 3}), ('C', 'D', {'weight': 3}),
-                          ('B', 'E', {'weight': 1})])
+                          ('B', 'E', {'weight': 1}), ('C', 'E', {'weight': 1})])
     start_node = 'A'
     goal_nodes = ['D', 'E']
     cost, path = greedy_search(graph, start_node, goal_nodes)

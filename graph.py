@@ -253,33 +253,32 @@ def greedy_search(graph, start_node, goal_nodes):
     >>> greedy_search(G, s_node, g_nodes)
     (1, ['A', 'C'])
     """
-    # Check if graph is empty
+    # check if graph is empty
     if graph is None:
         raise ValueError("Empty graph")
-    # Check if start node is not in graph
+    # check if start node is not in graph
     if not graph.has_node(start_node):
         raise ValueError(f"Start node {start_node} is not in graph")
-    # Check if a goal node is not in graph
+    # check if a goal node is not in graph
     for node in goal_nodes:
         if not graph.has_node(node):
             raise ValueError(f"Goal node {node} is not in graph")
 
-    # Initialize a priority queue to store the current node, cost, and path
+    # initialize a priority queue to store the current node, cost, and path
     fringe = [(start_node, 0, [start_node])]
-    # Create a set to keep track of visited nodes
+    # create a set to keep track of visited nodes
     visited = set()
 
     while fringe:
         node, cost, path = fringe.pop()
 
-        # If the current node is one of the goal nodes, return the cost and path to this goal node
+        # if the current node is one of the goal nodes, return the cost and path to this goal node
         if node in goal_nodes:
-            # Return cost and path to this goal node
+            # return cost and path to this goal node
             return cost, path
-
         visited.add(node)
 
-        # Explore neighboring nodes
+        # explore neighboring nodes
         neighbors = list(graph.neighbors(node))
         unvisited_neighbors = [(neighbor, graph[node][neighbor]['weight']) for neighbor in neighbors if neighbor not in visited]
 
@@ -290,7 +289,7 @@ def greedy_search(graph, start_node, goal_nodes):
             new_path = path + [next_node]
             fringe.append((next_node, new_cost, new_path))
 
-    # If no path to any goal node is found, return None
+    # if no path to any goal node is found, return None
     return None, None
 
 
