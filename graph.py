@@ -35,8 +35,8 @@ def get_input_edges(input_edges):
     for edge in input_graph_edges:
         # check if the edge is in a correct format and append it the the list created
         if match := re.search(r"^(\w+)\s*,\s*(\w+)\s*=\s*(\d+)$", edge.strip(), re.IGNORECASE):
-            graph_edges.append((match.group(1), match.group(2), {"weight": match.group(3)}))
-        # if user enter invalid input, return to input graph edges again
+            graph_edges.append((match.group(1), match.group(2), {"weight": int(match.group(3))}))
+        # if user enter invalid input, raise value error
         else:
             # Display a message box for invalid input
             raise ValueError("Invalid edges")
@@ -191,7 +191,7 @@ def ucs(graph: nx.DiGraph, start_node: str, goal_nodes: list):
     >>> G = nx.DiGraph()
     >>> G.add_weighted_edges_from([('A', 'B', 1), ('A', 'C', 2), ('B', 'D', 3), ('C', 'D', 1)])
     >>> s_node = 'A'
-    >>> g_nodes = 'D'
+    >>> g_nodes = ['D']
     >>> ucs(G , s_node, g_nodes)
     (4, ['A', 'C', 'D'])
     """
@@ -280,7 +280,8 @@ def greedy_search(graph, start_node, goal_nodes):
 
         # explore neighboring nodes
         neighbors = list(graph.neighbors(node))
-        unvisited_neighbors = [(neighbor, graph[node][neighbor]['weight']) for neighbor in neighbors if neighbor not in visited]
+        unvisited_neighbors = [(neighbor, graph[node][neighbor]['weight'])
+                               for neighbor in neighbors if neighbor not in visited]
 
         if unvisited_neighbors:
             unvisited_neighbors.sort(key=lambda x: x[1])
@@ -291,6 +292,55 @@ def greedy_search(graph, start_node, goal_nodes):
 
     # if no path to any goal node is found, return None
     return None, None
+
+
+def get_input_heuristic_weights(input_heuristic):
+    """
+     prompt the user for input of graph nodes with weights, validate the input, and return a list of graph nodes with weights.
+
+     this function ensures that the user-provided graph nodes with weights are correctly formatted as
+    'node=weight,node=weight,node=weight,...', where 'node' can be any alphanumeric character,
+     and 'weight' must be a non-negative integer.
+
+     args: 'node=weight,node=weight,node=weight,...'
+
+     returns: list of directories: A list of dictionaries where each dictionary consists of 'node' as key
+              and weight as value.
+    """
+    # get graph heuristic nodes concatenated with ',' from the user
+    input_heuristic = input_heuristic.strip()
+
+    # get a list of graph heuristic nodes
+    input_heuristic_nodes = input_heuristic.split(",")
+    # create a list to store graph heuristics in a correct format
+    heuristic_nodes = []
+    for node in input_heuristic_nodes:
+        # check if the edge is in a correct format and append it the the list created
+        if match := re.search(r"^(\w+)\s*=\s*(\d+)$", node.strip(), re.IGNORECASE):
+            heuristic_nodes.append({match.group(1): int(match.group(2))})
+        # if user enter invalid input, raise value error
+        else:
+            # Display a message box for invalid input
+            raise ValueError("Invalid heuristic nodes")
+    # return list of heuristic nodes
+    if len(heuristic_nodes) == len(input_heuristic_nodes):
+        return heuristic_nodes
+
+
+def a_star(graph, start_node, goal_nodes, heuristic_nodes):
+    # check if graph is empty
+    if graph is None:
+        raise ValueError("Empty graph")
+    # check if start node is not in graph
+    if not graph.has_node(start_node):
+        raise ValueError(f"Start node {start_node} is not in graph")
+    # check if a goal node is not in graph
+    for node in goal_nodes:
+        if not graph.has_node(node):
+            raise ValueError(f"Goal node {node} is not in graph")
+    # check if any graph node has not a heuristic node
+    if any(all(graph_node not in node.keys() for node in heuristic_nodes) for graph_node in graph.nodes):
+        raise ValueError("Invalid heuristic nodes")
 
 
 def draw_graph(graph: nx.DiGraph, start_node: str, goal_nodes: list, path: list, cost: int, search_algo):

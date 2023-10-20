@@ -31,19 +31,29 @@ start_node_entry = tk.Entry(frame_input, width=10)
 start_node_entry.pack()
 
 # Create a label widget
-input_goal_nodes_label = tk.Label(frame_input, text="Enter goal nodes as (A,B,C,...): ", padx=10, pady=10)
+input_goal_nodes_label = tk.Label(frame_input, text="Enter goal nodes as (A,B,C,...): ",
+                                  padx=10, pady=10)
 # Add the label widget to the window
 input_goal_nodes_label.pack()
 # Create an Entry widget within the Frame to get goal nodes
-goal_nodes_entry = tk.Entry(frame_input, width=30)
+goal_nodes_entry = tk.Entry(frame_input, width=20)
 goal_nodes_entry.pack()
+
+# Create a label widget
+heuristic_label = tk.Label(frame_input,
+                                 text="Specify heuristic as (node=weight, node=weight) in case of A* algorithm:",
+                                 padx=10, pady=10)
+heuristic_label.pack()
+# Create an Entry widget within the Frame to get heuristic input
+heuristic_entry = tk.Entry(frame_input, width=40)
+heuristic_entry.pack()
 
 # Create a label widget
 input_search_algorithm_label = tk.Label(frame_input, text="Select search algorithm: ", padx=10, pady=10)
 # Add the label widget to the window
 input_search_algorithm_label.pack()
 # Create an Option Menu Widget with search algorithms
-options = ["BFS", "DFS", "UCS", "Greedy"]
+options = ["BFS", "DFS", "UCS", "Greedy", "A*"]
 selected_option = tk.StringVar()
 selected_option.set(options[0])  # Set the default option
 option_var = tk.StringVar()
@@ -51,9 +61,6 @@ option_menu = tk.OptionMenu(frame_input, option_var, *options)
 option_menu.pack()
 # Set the default value in the OptionMenu
 option_var.set(selected_option.get())
-
-# Create a margin between the OptionMenu and the Button
-tk.Label(frame_input, text="").pack()
 
 # Create a margin between the Button and the Output
 tk.Label(frame_input, text="").pack()
@@ -127,6 +134,15 @@ def on_button_selected():
                 raise ValueError("Cannot reach path")
         elif selected_algorithm == "Greedy":
             cost_to_goal, path_to_goal = g.greedy_search(graph, start_node, goal_nodes)
+            if path_to_goal:
+                output(cost_to_goal, path_to_goal)
+                g.draw_graph(graph, start_node, goal_nodes, path_to_goal, cost_to_goal, selected_algorithm)
+            else:
+                raise ValueError("Cannot reach path")
+        else:
+            # getting the heuristic of nodes in case of A* algorithm
+            heuristic_nodes = g.get_input_heuristic_weights(heuristic_entry.get())
+            cost_to_goal, path_to_goal = g.a_star(graph, start_node, goal_nodes, heuristic_nodes)
             if path_to_goal:
                 output(cost_to_goal, path_to_goal)
                 g.draw_graph(graph, start_node, goal_nodes, path_to_goal, cost_to_goal, selected_algorithm)
