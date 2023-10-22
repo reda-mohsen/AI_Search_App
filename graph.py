@@ -13,7 +13,6 @@
 import networkx as nx
 import matplotlib.pyplot as plt
 import heapq
-from PIL import Image
 import re
 
 
@@ -337,12 +336,16 @@ def a_star(graph, start_node, goal_nodes):
             raise ValueError(f"Goal node {node} is not in graph")
 
     # define a heuristic function for estimating the cost to reach a goal from a given node
-    def heuristic(node, goal):
+    def heuristic(node: str, goal: str):
         # using the Euclidean distance between two nodes.
-        return nx.shortest_path_length(graph, source=node, target=goal, weight='weight')
+        try:
+            shortest_path_length = nx.shortest_path_length(graph, source=node, target=goal, weight='weight')
+        except nx.NetworkXNoPath:
+            raise ValueError("No path found")
+        return shortest_path_length
 
     # define a function to reconstruct the path from the starting node to the current node
-    def reconstruct_path(came_from, current):
+    def reconstruct_path(came_from: dir, current: str):
         path = [current]
         while current in came_from:
             current = came_from[current]
@@ -451,6 +454,3 @@ def draw_graph(graph: nx.Graph, start_node: str, goal_nodes: list, path: list, c
     plt.savefig("graph.png")
     # show the figure
     plt.show()
-    # Open and display the saved figure
-    # img = Image.open("graph.png")
-    # img.show()
