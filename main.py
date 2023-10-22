@@ -1,3 +1,16 @@
+# ------------------------------------------
+# Name: Reda Mohsen Reda
+# Location: Egypt, Cairo
+# Project Title: AI Search Algorithms
+# Description:
+# This application implements various search algorithms to find paths between a start node and goal node.
+# The search algorithms implemented are:
+#   - Breadth-First Search
+#   - Depth-First Search
+#   - Uniform-Cost Search
+#   - Greedy Best-First Search
+#   - A* Best-First Search
+# ------------------------------------------
 import tkinter as tk
 import graph as g
 from tkinter import messagebox
@@ -12,16 +25,19 @@ frame_output = tk.Frame(root, padx=10, pady=10)
 frame_output.pack()
 
 # Create a label widget
-input_edges_label = tk.Label(frame_input,
-                             text="Enter edges with weights as (node,node=weight+node,node=weight): ", padx=10, pady=10)
+input_edges_label = tk.Label(frame_input, text="Enter Edges", padx=10, pady=1)
 # Add the label widget to the window
-input_edges_label.pack()
+input_edges_label.pack(pady=(9, 1))
+# Create a label widget
+edges_ex_label = tk.Label(frame_input, text="(i.e, node,node=weight+node,node=weight)", padx=10, pady=1)
+# Add the label widget to the window
+edges_ex_label.pack(pady=(1, 9))
 # Create an Entry widget within the Frame to get input edges
 input_edges_entry = tk.Entry(frame_input, width=100)
 input_edges_entry.pack()
 
 # Create a label widget
-input_start_node_label = tk.Label(frame_input, text="Enter start node: ", padx=10, pady=10)
+input_start_node_label = tk.Label(frame_input, text="Enter Start Node", padx=10, pady=10)
 # Add the label widget to the window
 input_start_node_label.pack()
 # Create an Entry widget within the Frame to get start node
@@ -29,16 +45,21 @@ start_node_entry = tk.Entry(frame_input, width=10)
 start_node_entry.pack()
 
 # Create a label widget
-input_goal_nodes_label = tk.Label(frame_input, text="Enter goal nodes as (A,B,C,...): ",
-                                  padx=10, pady=10)
+input_goal_nodes_label = tk.Label(frame_input, text="Enter Goal Nodes",
+                                  padx=10, pady=1)
 # Add the label widget to the window
-input_goal_nodes_label.pack()
+input_goal_nodes_label.pack(pady=(9, 1))
+# Create a label widget
+goal_nodes_ex_label = tk.Label(frame_input, text="(i.e, A,B,C,...)",
+                                  padx=10, pady=1)
+# Add the label widget to the window
+goal_nodes_ex_label.pack(pady=(1, 9))
 # Create an Entry widget within the Frame to get goal nodes
 goal_nodes_entry = tk.Entry(frame_input, width=20)
 goal_nodes_entry.pack()
 
 # Create a label widget
-input_search_algorithm_label = tk.Label(frame_input, text="Select search algorithm: ", padx=10, pady=10)
+input_search_algorithm_label = tk.Label(frame_input, text="Select Search Algorithm: ", padx=10, pady=10)
 # Add the label widget to the window
 input_search_algorithm_label.pack()
 # Create an Option Menu Widget with search algorithms

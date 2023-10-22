@@ -1,3 +1,16 @@
+# ------------------------------------------
+# Name: Reda Mohsen Reda
+# Location: Egypt, Cairo
+# Project Title: AI Search Algorithms
+# Description:
+# This application implements various search algorithms to find paths between a start node and goal node.
+# The search algorithms implemented are:
+#   - Breadth-First Search
+#   - Depth-First Search
+#   - Uniform-Cost Search
+#   - Greedy Best-First Search
+#   - A* Best-First Search
+# ------------------------------------------
 import pytest
 import networkx as nx
 from graph import get_input_edges, get_graph, bfs, dfs, ucs, greedy_search, a_star

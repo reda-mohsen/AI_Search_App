@@ -10,8 +10,6 @@
 #   - Uniform-Cost Search
 #   - Greedy Best-First Search
 #   - A* Best-First Search
-# ------------------------------------------
-
 import networkx as nx
 import matplotlib.pyplot as plt
 import heapq
