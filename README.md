@@ -8,7 +8,7 @@ This application implements various search algorithms to find the optimal path b
 * Greedy Best-Frist Search
 * A* Best-First Search
 
-## Installation 
+## Installation and How to Run
 To use this project, you must have Python 3 installed on your system. If you do not have Python 3 installed, you can download it from the official website: https://www.python.org/downloads/
 
 After installing Python 3, you can install the necessary dependencies using pip. To install the required packages, run the following command in your terminal or command prompt:
@@ -18,9 +18,14 @@ pip install -r requirements.txt
 ```
 This command will install all the dependencies listed in the requirements.txt file.
 
-Once you have installed the dependencies, you can run the project by executing the project.py file.
+Once you have installed the dependencies, you can run the project by write the following command in your terminal or command prompt:
+```
+python main.py
+```
+This command will run the program
 
 ## Input
+<img src = "assets/gui.png">
 
 ## Output
 
