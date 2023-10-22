@@ -1,7 +1,20 @@
+# ------------------------------------------
 # Name: Reda Mohsen Reda
-# Project Title: AI Search Algorithms Application
+# Location: Egypt, Cairo
+# Project Title: AI Search Algorithms
+# Description:
+# This application implements various search algorithms to find paths between a start node and goal node.
+# The search algorithms implemented are:
+#   - Breadth-First Search
+#   - Depth-First Search
+#   - Uniform-Cost Search
+#   - Greedy Best-First Search
+#   - A* Best-First Search
+# ------------------------------------------
+
 import networkx as nx
 import matplotlib.pyplot as plt
+import heapq
 from PIL import Image
 import re
 
@@ -55,12 +68,8 @@ def get_graph(graph_edges: list):
     
     returns:
     nx.DiGraph: a NetworkX Directed Graph object created from the provided graph edges.
-    
-    Example:
-    >>> graph_edges = [('A', 'B', {'weight': '3'}), ('C', 'D', {'weight': '2'})]
-    >>> get_graph(graph_edges)
-    <networkx.classes.digraph.DiGraph object at 0x...>
     """
+    # check if graph edges is not none
     if graph_edges:
         # create an empty directed graph
         graph = nx.Graph()
@@ -72,12 +81,12 @@ def get_graph(graph_edges: list):
         raise ValueError("No graph edges provided")
 
 
-def bfs(graph: nx.DiGraph, start_node: str, goal_nodes: list):
+def bfs(graph: nx.Graph, start_node: str, goal_nodes: list):
     """
-    perform Breadth-First Search (BFS) on a directed graph to find a path from the start node to one of the goal nodes.
+    perform Breadth-First Search (BFS) on a graph to find a path from the start node to one of the goal nodes.
 
     args:
-    graph (nx.DiGraph): a NetworkX Directed Graph object.
+    graph (nx.DiGraph): a NetworkX Graph object.
     start_node (str): the starting node for BFS.
     goal_nodes (list): a list of nodes to reach using BFS.
 
@@ -85,7 +94,7 @@ def bfs(graph: nx.DiGraph, start_node: str, goal_nodes: list):
     tuple or None: a tuple containing the cost and path if a path is found; otherwise, returns None.
 
     example:
-    >>> G = nx.DiGraph()
+    >>> G = nx.Graph()
     >>> G.add_edges_from([('A', 'B', {'weight': 1}), ('A', 'C', {'weight': 2}), ('B', 'D', {'weight': 3})])
     >>> s_node = 'A'
     >>> g_nodes = ['D', 'C']
@@ -123,12 +132,12 @@ def bfs(graph: nx.DiGraph, start_node: str, goal_nodes: list):
     return None, None
 
 
-def dfs(graph: nx.DiGraph, start_node: str, goal_nodes: list):
+def dfs(graph: nx.Graph, start_node: str, goal_nodes: list):
     """
-    perform Depth-First Search (DFS) on a directed graph to find a path from the start node to one of the goal nodes.
+    perform Depth-First Search (DFS) on a graph to find a path from the start node to one of the goal nodes.
 
     args:
-    graph (nx.DiGraph): a NetworkX Directed Graph object.
+    graph (nx.DiGraph): a NetworkX Graph object.
     start_node (str): the starting node for BFS.
     goal_nodes (list): a list of nodes to reach using BFS.
 
@@ -136,7 +145,7 @@ def dfs(graph: nx.DiGraph, start_node: str, goal_nodes: list):
     tuple or None: a tuple containing the cost and path if a path is found; otherwise, returns None.
 
     example:
-    >>> G = nx.DiGraph()
+    >>> G = nx.Graph()
     >>> G.add_edges_from([('A', 'B', {'weight': 1}), ('A', 'C', {'weight': 2}), ('B', 'D', {'weight': 3})])
     >>> s_node = 'A'
     >>> g_nodes = ['D', 'C']
@@ -174,13 +183,13 @@ def dfs(graph: nx.DiGraph, start_node: str, goal_nodes: list):
     return None, None
 
 
-def ucs(graph: nx.DiGraph, start_node: str, goal_nodes: list):
+def ucs(graph: nx.Graph, start_node: str, goal_nodes: list):
     """
-    perform Uniform Cost Search (UCS) on a directed graph to find the lowest cost path
+    perform Uniform Cost Search (UCS) on a graph to find the lowest cost path
     from the start node to the goal node.
 
     args:
-    graph (nx.DiGraph): a NetworkX Directed Graph object with non-negative edge weights.
+    graph (nx.Graph): a NetworkX Graph object with non-negative edge weights.
     start_node (str): the starting node for UCS.
     goal_node (str): the goal node to reach.
 
@@ -188,7 +197,7 @@ def ucs(graph: nx.DiGraph, start_node: str, goal_nodes: list):
     tuple or None: a tuple containing the cost and path if a path is found; otherwise, returns None.
 
     example:
-    >>> G = nx.DiGraph()
+    >>> G = nx.Graph()
     >>> G.add_weighted_edges_from([('A', 'B', 1), ('A', 'C', 2), ('B', 'D', 3), ('C', 'D', 1)])
     >>> s_node = 'A'
     >>> g_nodes = ['D']
@@ -231,7 +240,7 @@ def ucs(graph: nx.DiGraph, start_node: str, goal_nodes: list):
     return None, None
 
 
-def greedy_search(graph, start_node, goal_nodes):
+def greedy_search(graph: nx.Graph, start_node: str, goal_nodes: list):
     """
     perform Greedy Search on a graph to find the path and cost to one of the goal nodes.
 
@@ -280,10 +289,12 @@ def greedy_search(graph, start_node, goal_nodes):
 
         # explore neighboring nodes
         neighbors = list(graph.neighbors(node))
+        # create a list of unvisited neighbors with their edge costs
         unvisited_neighbors = [(neighbor, graph[node][neighbor]['weight'])
                                for neighbor in neighbors if neighbor not in visited]
 
         if unvisited_neighbors:
+            # sort the unvisited neighbors based on their edge cost
             unvisited_neighbors.sort(key=lambda x: x[1])
             next_node, edge_cost = unvisited_neighbors[0]
             new_cost = cost + int(edge_cost)
@@ -294,41 +305,28 @@ def greedy_search(graph, start_node, goal_nodes):
     return None, None
 
 
-def get_input_heuristic_weights(input_heuristic):
+def a_star(graph, start_node, goal_nodes):
     """
-     prompt the user for input of graph nodes with weights, validate the input, and return a list of graph nodes with weights.
+      perform A Star Search on a graph to find the path and cost to one of the goal nodes.
 
-     this function ensures that the user-provided graph nodes with weights are correctly formatted as
-    'node=weight,node=weight,node=weight,...', where 'node' can be any alphanumeric character,
-     and 'weight' must be a non-negative integer.
+      args:
+      graph (nx.Graph): a NetworkX Graph object.
+      start_node (str): the starting node for the search.
+      goal_nodes (list): a list of nodes to reach during the search.
 
-     args: 'node=weight,node=weight,node=weight,...'
+      returns:
+      tuple or None: a tuple containing the cost and path if a path to a goal node is found; otherwise, returns None.
 
-     returns: list of directories: A list of dictionaries where each dictionary consists of 'node' as key
-              and weight as value.
-    """
-    # get graph heuristic nodes concatenated with ',' from the user
-    input_heuristic = input_heuristic.strip()
-
-    # get a list of graph heuristic nodes
-    input_heuristic_nodes = input_heuristic.split(",")
-    # create a list to store graph heuristics in a correct format
-    heuristic_nodes = []
-    for node in input_heuristic_nodes:
-        # check if the edge is in a correct format and append it the the list created
-        if match := re.search(r"^(\w+)\s*=\s*(\d+)$", node.strip(), re.IGNORECASE):
-            heuristic_nodes.append({match.group(1): int(match.group(2))})
-        # if user enter invalid input, raise value error
-        else:
-            # Display a message box for invalid input
-            raise ValueError("Invalid heuristic nodes")
-    # return list of heuristic nodes
-    if len(heuristic_nodes) == len(input_heuristic_nodes):
-        return heuristic_nodes
-
-import heapq
-
-def a_star(graph, start_node, goal_nodes, heuristic_nodes):
+      example:
+      >>> G = nx.Graph()
+      >>> G.add_edge('A', 'B', weight=2)
+      >>> G.add_edge('A', 'C', weight=1)
+      >>> G.add_edge('B', 'D', weight=3)
+      >>> s_node = 'A'
+      >>> g_nodes = ['D', 'C']
+      >>> a_star(G, s_node, g_nodes)
+      (1, ['A', 'C'])
+      """
     # check if graph is empty
     if graph is None:
         raise ValueError("Empty graph")
@@ -339,15 +337,13 @@ def a_star(graph, start_node, goal_nodes, heuristic_nodes):
     for node in goal_nodes:
         if not graph.has_node(node):
             raise ValueError(f"Goal node {node} is not in graph")
-    # check if any graph node has not a heuristic node
-    if any(all(graph_node not in node.keys() for node in heuristic_nodes) for graph_node in graph.nodes):
-        raise ValueError("Invalid heuristic nodes")
 
+    # define a heuristic function for estimating the cost to reach a goal from a given node
     def heuristic(node, goal):
-        # You can define your own heuristic function here.
-        # This is a simple example using the Euclidean distance between two nodes.
+        # using the Euclidean distance between two nodes.
         return nx.shortest_path_length(graph, source=node, target=goal, weight='weight')
 
+    # define a function to reconstruct the path from the starting node to the current node
     def reconstruct_path(came_from, current):
         path = [current]
         while current in came_from:
@@ -355,47 +351,64 @@ def a_star(graph, start_node, goal_nodes, heuristic_nodes):
             path.insert(0, current)
         return path
 
+    # initialize a priority queue to explore nodes
     fringe = []
+    # set to keep track of the visited nodes
     visited = set()
+    # the cost from the start node to a given node
     g_score = {node: float('inf') for node in graph.nodes}
+    # the estimated total cost from start to goal
     f_score = {node: float('inf') for node in graph.nodes}
+    # dictionary to reconstruct the path
     came_from = {}
 
+    # initialize the start node's f and g scores
     g_score[start_node] = 0
+    # initial estimate to the first goal
     f_score[start_node] = heuristic(start_node, goal_nodes[0])
+    # add the start node to the priority queue
     heapq.heappush(fringe, (f_score[start_node], start_node))
 
     while fringe:
+        # get the node with the lowest estimated cost
         _, current = heapq.heappop(fringe)
-
+        # if the current node is one of the goal nodes, return the cost and path
         if current in goal_nodes:
             path = reconstruct_path(came_from, current)
             cost = g_score[current]
             return cost, path
-
+        # add current node to visited as it is not a goal node
         visited.add(current)
 
         for neighbor in graph.neighbors(current):
+            # skip already visited neighbors
             if neighbor in visited:
                 continue
 
+            # calculate the tentative_g_score, which represents the total cost from the start node to the neighbor node
             tentative_g_score = g_score[current] + graph[current][neighbor].get('weight', 1)
-
+            # check if this tentative_g_score is lower than the previously recorded g_score for the neighbor
+            # as if the tentative_g_score is an improvement, update the path and scores for the neighbor
             if tentative_g_score < g_score[neighbor]:
+                # store the current node as the previous node for the neighbor
                 came_from[neighbor] = current
+                # update the g_score for the neighbor with the improved tentative_g_score
                 g_score[neighbor] = tentative_g_score
+                # calculate the f_score for the neighbor,
+                # which is the sum of the updated g_score and a heuristic estimate
                 f_score[neighbor] = g_score[neighbor] + heuristic(neighbor, goal_nodes[0])
+                # push the neighbor onto the priority queue with its new f_score
                 heapq.heappush(fringe, (f_score[neighbor], neighbor))
-
+    # if no path to any goal node is found, return None
     return None, None
 
 
-def draw_graph(graph: nx.DiGraph, start_node: str, goal_nodes: list, path: list, cost: int, search_algo):
+def draw_graph(graph: nx.Graph, start_node: str, goal_nodes: list, path: list, cost: int, search_algo):
     """
      draw and show a directed graph with specific node and edge attributes, and save it as a PNG file.
 
      args:
-     graph (nx.DiGraph): a NetworkX Directed Graph object.
+     graph (nx.Graph): a NetworkX Graph object.
      start_node (str): the starting node.
      goal_nodes (list): a list of goal nodes.
      path (list): a list of nodes representing the path.
@@ -406,7 +419,7 @@ def draw_graph(graph: nx.DiGraph, start_node: str, goal_nodes: list, path: list,
      None
 
      example:
-     >>> G = nx.DiGraph()
+     >>> G = nx.Graph()
      >>> G.add_edges_from([('A', 'B', {'weight': 1}), ('A', 'C', {'weight': 2}), ('B', 'D', {'weight': 3})])
      >>> s_node = 'A'
      >>> g_nodes = ['D']

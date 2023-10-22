@@ -1,5 +1,3 @@
-# Name: Reda Mohsen Reda
-# Project Title: AI Search Algorithms Application
 import tkinter as tk
 import graph as g
 from tkinter import messagebox
@@ -38,15 +36,6 @@ input_goal_nodes_label.pack()
 # Create an Entry widget within the Frame to get goal nodes
 goal_nodes_entry = tk.Entry(frame_input, width=20)
 goal_nodes_entry.pack()
-
-# Create a label widget
-heuristic_label = tk.Label(frame_input,
-                                 text="Specify heuristic as (node=weight, node=weight) in case of A* algorithm:",
-                                 padx=10, pady=10)
-heuristic_label.pack()
-# Create an Entry widget within the Frame to get heuristic input
-heuristic_entry = tk.Entry(frame_input, width=40)
-heuristic_entry.pack()
 
 # Create a label widget
 input_search_algorithm_label = tk.Label(frame_input, text="Select search algorithm: ", padx=10, pady=10)
@@ -98,6 +87,7 @@ def on_button_selected():
         if start_node_entry.get():
             start_node = start_node_entry.get()
         else:
+            # display this message to user if did not input start node
             raise ValueError("Empty start node")
 
         # getting the goal nodes from the user and put the nodes in a list
@@ -107,16 +97,24 @@ def on_button_selected():
             for node in input_goal_nodes:
                 goal_nodes.append(node.strip())
         else:
+            # display this message to user if did not input goal nodes
             raise ValueError("Empty goal nodes")
 
         selected_option.set(option_var.get())
         selected_algorithm = selected_option.get()
+        # check the search algorithm the user has selected
+        # if the user selected bfs search algorithm
         if selected_algorithm == "BFS":
+            # applying bfs search algorithm on the graph to get the path and the cost
             cost_to_goal, path_to_goal = g.bfs(graph, start_node, goal_nodes)
             if path_to_goal:
+                # display the path and cost to the user
                 output(cost_to_goal, path_to_goal)
+                # draw a graph with the path colored orange, start node colored red,
+                # goal nodes colored green
                 g.draw_graph(graph, start_node, goal_nodes, path_to_goal, cost_to_goal, selected_algorithm)
             else:
+                # if no path found to goal display this message to the user
                 raise ValueError("Cannot reach path")
         elif selected_algorithm == "DFS":
             cost_to_goal, path_to_goal = g.dfs(graph, start_node, goal_nodes)
@@ -140,12 +138,10 @@ def on_button_selected():
             else:
                 raise ValueError("Cannot reach path")
         else:
-            # getting the heuristic of nodes in case of A* algorithm
-            heuristic_nodes = g.get_input_heuristic_weights(heuristic_entry.get())
-            cost_to_goal, path_to_goal = g.a_star(astar_graph, start_node, goal_nodes, heuristic_nodes)
+            cost_to_goal, path_to_goal = g.a_star(graph, start_node, goal_nodes)
             if path_to_goal:
                 output(cost_to_goal, path_to_goal)
-                g.draw_graph(astar_graph, start_node, goal_nodes, path_to_goal, cost_to_goal, selected_algorithm)
+                g.draw_graph(graph, start_node, goal_nodes, path_to_goal, cost_to_goal, selected_algorithm)
             else:
                 raise ValueError("Cannot reach path")
 

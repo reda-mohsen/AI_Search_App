@@ -1,10 +1,10 @@
 import pytest
 import networkx as nx
-from graph import get_input_edges, get_graph, bfs, dfs, ucs, greedy_search
+from graph import get_input_edges, get_graph, bfs, dfs, ucs, greedy_search, a_star
 
 
-def test_get_input_graph():
-    assert get_input_edges("A, B=3+C, D=2") == [('A', 'B', {'weight': '3'}), ('C', 'D', {'weight': '2'})]
+def test_get_input_edges():
+    assert get_input_edges("A, B=3+C, D=2") == [('A', 'B', {'weight': 3}), ('C', 'D', {'weight': 2})]
     with pytest.raises(ValueError):
         get_input_edges("")
         get_input_edges("A,B=1 - A,C=4")
@@ -23,14 +23,14 @@ def test_get_graph():
 
 
 def test_bfs():
-    graph = nx.DiGraph()
+    graph = nx.Graph()
     graph.add_edges_from([('A', 'B', {'weight': '1'}), ('A', 'C', {'weight': '2'}), ('B', 'D', {'weight': '3'})])
     start_node = 'A'
     goal_nodes = ['D']
     cost, path = bfs(graph, start_node, goal_nodes)
     assert cost == 4
     assert path == ['A', 'B', 'D']
-    graph = nx.DiGraph()
+    graph = nx.Graph()
     with pytest.raises(ValueError):
         start_node = ""
         bfs(graph, start_node, goal_nodes)
@@ -40,7 +40,7 @@ def test_bfs():
 
 
 def test_dfs():
-    graph = nx.DiGraph()
+    graph = nx.Graph()
     graph.add_edges_from([('A', 'B', {'weight': 1}), ('A', 'C', {'weight': 2}), ('B', 'D', {'weight': 3})])
     start_node = 'A'
     goal_nodes = ['D', 'C']
@@ -57,7 +57,7 @@ def test_dfs():
 
 
 def test_ucs():
-    graph = nx.DiGraph()
+    graph = nx.Graph()
     graph.add_edges_from([('A', 'B', {'weight': 1}), ('A', 'C', {'weight': 2}),
                           ('B', 'D', {'weight': 3}), ('C', 'D', {'weight': 3})])
     start_node = 'A'
@@ -74,7 +74,7 @@ def test_ucs():
         ucs(graph, start_node, goal_nodes)
 
 def test_greedy():
-    graph = nx.DiGraph()
+    graph = nx.Graph()
     graph.add_edges_from([('A', 'B', {'weight': 1}), ('A', 'C', {'weight': 2}),
                           ('B', 'D', {'weight': 3}), ('C', 'D', {'weight': 3}),
                           ('B', 'E', {'weight': 1}), ('C', 'E', {'weight': 1})])
@@ -83,13 +83,31 @@ def test_greedy():
     cost, path = greedy_search(graph, start_node, goal_nodes)
     assert cost == 2
     assert path == ['A', 'B', 'E']
-    graph = nx.DiGraph()
+    graph = nx.Graph()
     with pytest.raises(ValueError):
         start_node = ""
         greedy_search(graph, start_node, goal_nodes)
         start_node = 'A'
         goal_nodes = ['']
         greedy_search(graph, start_node, goal_nodes)
+
+def test_a_star():
+    graph = nx.Graph()
+    graph.add_edges_from([('A', 'B', {'weight': 1}), ('A', 'C', {'weight': 2}),
+                          ('B', 'D', {'weight': 3}), ('C', 'D', {'weight': 3}),
+                          ('B', 'E', {'weight': 1}), ('C', 'E', {'weight': 1})])
+    start_node = 'A'
+    goal_nodes = ['D', 'E']
+    cost, path = a_star(graph, start_node, goal_nodes)
+    assert cost == 4
+    assert path == ['A', 'B', 'D']
+    graph = nx.Graph()
+    with pytest.raises(ValueError):
+        start_node = ""
+        a_star(graph, start_node, goal_nodes)
+        start_node = 'A'
+        goal_nodes = ['']
+        a_star(graph, start_node, goal_nodes)
 
 
 if __name__ == '__main__':
