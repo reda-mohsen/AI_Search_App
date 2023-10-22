@@ -1,7 +1,11 @@
 # AI Search Application
 
-## Video Demo:
+## Video Demo
 [AI Search Application Demo](URL_HERE)
+
+## Introduction
+
+AI search algorithms, such as BFS, DFS, UCS, Greedy, and A*, are fundamental tools for problem-solving and optimization in artificial intelligence. Breadth-First Search (BFS) and Depth-First Search (DFS) are used in web crawling, game playing, and puzzle solving, while Uniform Cost Search (UCS) is essential for route planning and network optimization. Greedy search is employed in heuristic-based game playing and the Traveling Salesman Problem, while A* combines the strengths of UCS and Greedy Search, aiding pathfinding in video games and robotics. These algorithms find real-world applications in robotics, natural language processing, medical diagnosis, recommendation systems, image analysis, network analysis, and data mining, making them vital for solving complex problems across various domains.
 
 ## Description:
 This application implements various search algorithms to find the optimal path between a start node and a goal node in a graph. The search algorithms implemented in this application include:
