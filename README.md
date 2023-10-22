@@ -44,5 +44,3 @@ The path to goal node is displayed and its cost according to the selected algori
 <br> ![Output Screenshot](assets/gui_after.png) <br>
 A graph is drawn and saved in assets folder named "graph.png", the start node is colored in red, the goal nodes are colored in green, and the path to goal is colored in orange.
 <br> ![Output Graph](assets/graph.png) <br>
-
-## Test Cases
