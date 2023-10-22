@@ -18,6 +18,12 @@ from tkinter import messagebox
 # Create a main application window
 root = tk.Tk()
 root.title("AI Search Application")
+
+# Load the icon image file (replace "icon.png" with the actual file path)
+icon = tk.PhotoImage(file="assets/icon.png")
+# Set the icon for the window
+root.tk.call("wm", "iconphoto", root._w, icon)
+
 # Create a Frame to hold the Entry widget
 frame_input = tk.Frame(root, padx=10, pady=10)
 frame_input.pack(side="top")
@@ -45,13 +51,11 @@ start_node_entry = tk.Entry(frame_input, width=10)
 start_node_entry.pack()
 
 # Create a label widget
-input_goal_nodes_label = tk.Label(frame_input, text="Enter Goal Nodes",
-                                  padx=10, pady=1)
+input_goal_nodes_label = tk.Label(frame_input, text="Enter Goal Nodes", padx=10, pady=1)
 # Add the label widget to the window
 input_goal_nodes_label.pack(pady=(9, 1))
 # Create a label widget
-goal_nodes_ex_label = tk.Label(frame_input, text="(i.e, A,B,C,...)",
-                                  padx=10, pady=1)
+goal_nodes_ex_label = tk.Label(frame_input, text="(i.e, A,B,C,...)", padx=10, pady=1)
 # Add the label widget to the window
 goal_nodes_ex_label.pack(pady=(1, 9))
 # Create an Entry widget within the Frame to get goal nodes
@@ -73,7 +77,6 @@ option_menu.pack()
 option_var.set(selected_option.get())
 
 # Create a margin between the Button and the Output
-tk.Label(frame_input, text="").pack()
 tk.Label(frame_input, text="").pack()
 
 
