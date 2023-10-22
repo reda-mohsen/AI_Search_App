@@ -63,7 +63,7 @@ def get_graph(graph_edges: list):
     """
     if graph_edges:
         # create an empty directed graph
-        graph = nx.DiGraph()
+        graph = nx.Graph()
         # add edges to the graph based on the provided list of graph_edges
         graph.add_edges_from(graph_edges)
         # return the resulting graph
@@ -326,6 +326,7 @@ def get_input_heuristic_weights(input_heuristic):
     if len(heuristic_nodes) == len(input_heuristic_nodes):
         return heuristic_nodes
 
+import heapq
 
 def a_star(graph, start_node, goal_nodes, heuristic_nodes):
     # check if graph is empty
@@ -341,6 +342,52 @@ def a_star(graph, start_node, goal_nodes, heuristic_nodes):
     # check if any graph node has not a heuristic node
     if any(all(graph_node not in node.keys() for node in heuristic_nodes) for graph_node in graph.nodes):
         raise ValueError("Invalid heuristic nodes")
+
+    def heuristic(node, goal):
+        # You can define your own heuristic function here.
+        # This is a simple example using the Euclidean distance between two nodes.
+        return nx.shortest_path_length(graph, source=node, target=goal, weight='weight')
+
+    def reconstruct_path(came_from, current):
+        path = [current]
+        while current in came_from:
+            current = came_from[current]
+            path.insert(0, current)
+        return path
+
+    fringe = []
+    visited = set()
+    g_score = {node: float('inf') for node in graph.nodes}
+    f_score = {node: float('inf') for node in graph.nodes}
+    came_from = {}
+
+    g_score[start_node] = 0
+    f_score[start_node] = heuristic(start_node, goal_nodes[0])
+    heapq.heappush(fringe, (f_score[start_node], start_node))
+
+    while fringe:
+        _, current = heapq.heappop(fringe)
+
+        if current in goal_nodes:
+            path = reconstruct_path(came_from, current)
+            cost = g_score[current]
+            return cost, path
+
+        visited.add(current)
+
+        for neighbor in graph.neighbors(current):
+            if neighbor in visited:
+                continue
+
+            tentative_g_score = g_score[current] + graph[current][neighbor].get('weight', 1)
+
+            if tentative_g_score < g_score[neighbor]:
+                came_from[neighbor] = current
+                g_score[neighbor] = tentative_g_score
+                f_score[neighbor] = g_score[neighbor] + heuristic(neighbor, goal_nodes[0])
+                heapq.heappush(fringe, (f_score[neighbor], neighbor))
+
+    return None, None
 
 
 def draw_graph(graph: nx.DiGraph, start_node: str, goal_nodes: list, path: list, cost: int, search_algo):

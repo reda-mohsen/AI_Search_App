@@ -142,10 +142,10 @@ def on_button_selected():
         else:
             # getting the heuristic of nodes in case of A* algorithm
             heuristic_nodes = g.get_input_heuristic_weights(heuristic_entry.get())
-            cost_to_goal, path_to_goal = g.a_star(graph, start_node, goal_nodes, heuristic_nodes)
+            cost_to_goal, path_to_goal = g.a_star(astar_graph, start_node, goal_nodes, heuristic_nodes)
             if path_to_goal:
                 output(cost_to_goal, path_to_goal)
-                g.draw_graph(graph, start_node, goal_nodes, path_to_goal, cost_to_goal, selected_algorithm)
+                g.draw_graph(astar_graph, start_node, goal_nodes, path_to_goal, cost_to_goal, selected_algorithm)
             else:
                 raise ValueError("Cannot reach path")
 
