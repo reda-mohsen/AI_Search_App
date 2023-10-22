@@ -31,7 +31,7 @@ python main.py
 ```
 
 ## Input
-![Input Screenshot](assets/gui.png)
+<br> ![Input Screenshot](assets/gui.png) <br>
 To use the application: <br>
 1. Enter edges in the following format: `Node1, Node2=Cost + Node2, Node3=Cost` in the "Enter Edges" field. <br>
 2. Enter a start node to begin the search from it in the "Enter Start Node" field. <br>
@@ -40,6 +40,6 @@ To use the application: <br>
 5. Click the "Search" button to run the selected search algorithm on the provided graph. <br>
 
 ## Output
-![Output Screenshot](assets/gui.png)
+<br> ![Output Screenshot](assets/gui.png) <br>
 
 ## Test Cases
