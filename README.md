@@ -12,7 +12,6 @@ This application implements various search algorithms to find the optimal path b
 * A* Best-First Search
 
 ## Installation and How to Run
-Firstly, clone the project
 ### Prerequisites
 - Python 3 is required. If you don't have it, you can download it from the [official Python website](https://www.python.org/downloads/).
 ### Setup
