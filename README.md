@@ -32,7 +32,7 @@ python main.py
 
 ## Input
 To use the application: <br>
-1. Enter edges in the following format: `Node1, Node2=Cost + Node2, Node3=Cost` in the "Enter Edges" field. <br>
+1. Enter edges in the following format: 'Node1, Node2=Cost + Node2, Node3=Cost' in the "Enter Edges" field. <br>
 2. Enter a start node to begin the search from it in the "Enter Start Node" field. <br>
 3. Enter the goal nodes in the "Enter Goal Nodes" field to be reached using the selected search algorithm. <br>
 4. Select the search algorithm from the option menu (BFS, DFS, UCS, Greedy, A*). <br>
