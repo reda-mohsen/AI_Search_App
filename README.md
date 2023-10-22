@@ -31,15 +31,13 @@ python main.py
 ```
 
 ## Input
-<br>
 ![Input Screenshot](assets/gui.png)
-<br>
-To use the application:
-1. Enter edges in the following format: `Node1, Node2=Cost + Node2, Node3=Cost` in the "Enter Edges" field.
-2. Enter a start node to begin the search from it in the "Enter Start Node" field.
-3. Enter the goal nodes in the "Enter Goal Nodes" field to be reached using the selected search algorithm.
-4. Select the search algorithm from the option menu (BFS, DFS, UCS, Greedy, A*).
-5. Click the "Search" button to run the selected search algorithm on the provided graph.
+To use the application: <br>
+1. Enter edges in the following format: `Node1, Node2=Cost + Node2, Node3=Cost` in the "Enter Edges" field. <br>
+2. Enter a start node to begin the search from it in the "Enter Start Node" field. <br>
+3. Enter the goal nodes in the "Enter Goal Nodes" field to be reached using the selected search algorithm. <br>
+4. Select the search algorithm from the option menu (BFS, DFS, UCS, Greedy, A*). <br>
+5. Click the "Search" button to run the selected search algorithm on the provided graph. <br>
 
 ## Output
 ![Output Screenshot](assets/gui.png)
