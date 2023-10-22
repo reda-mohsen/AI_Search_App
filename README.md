@@ -1,3 +1,6 @@
+# Name: Reda Mohsen Reda
+# Location: Cairo, Egypt
+
 # AI Search Application
 
 ## Video Demo:
