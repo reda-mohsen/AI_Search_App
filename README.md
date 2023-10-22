@@ -28,11 +28,11 @@ This command will run the program
 <br>
 <img src = "assets/gui.png">
 <br>
-1. Enter edges in the following format: Node1, Node2=Cost + Node2, Node3=Cost in the “Enter Edges” field
-2. Enter a start node to begin the search from it in the “Enter Start Node” field.
-3. Enter the goal nodes in the “Enter Goal Nodes” field to be reached applying the search algorithm selected
-4. Select the search algorithm from the option menu (BFS, DFS, UCS, Greedy, A*)
-5. Click Search button to run the selected search algorithm on the provided graph
+1. Enter edges in the following format: Node1, Node2=Cost + Node2, Node3=Cost in the “Enter Edges” field <br>
+2. Enter a start node to begin the search from it in the “Enter Start Node” field.<br>
+3. Enter the goal nodes in the “Enter Goal Nodes” field to be reached applying the search algorithm selected<br>
+4. Select the search algorithm from the option menu (BFS, DFS, UCS, Greedy, A*)<br>
+5. Click Search button to run the selected search algorithm on the provided graph<br>
 
 ## Output
 <br>
