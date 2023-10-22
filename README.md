@@ -17,7 +17,7 @@ This application implements various search algorithms to find the optimal path b
 ### Setup
 1. Clone this project:
 ```
-git clone https://github.com/reda-mohsen/AI_Search_App>
+git clone https://github.com/reda-mohsen/AI_Search_App
 cd AI-Search-Application
 ```
 2. Install the necessary dependencies using pip:
