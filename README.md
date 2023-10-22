@@ -31,16 +31,18 @@ python main.py
 ```
 
 ## Input
-<br> ![Input Screenshot](assets/gui_before.png) <br>
 To use the application: <br>
 1. Enter edges in the following format: `Node1, Node2=Cost + Node2, Node3=Cost` in the "Enter Edges" field. <br>
 2. Enter a start node to begin the search from it in the "Enter Start Node" field. <br>
 3. Enter the goal nodes in the "Enter Goal Nodes" field to be reached using the selected search algorithm. <br>
 4. Select the search algorithm from the option menu (BFS, DFS, UCS, Greedy, A*). <br>
 5. Click the "Search" button to run the selected search algorithm on the provided graph. <br>
+<br> ![Input Screenshot](assets/gui_before.png) <br>
 
 ## Output
+The path to goal node is displayed and its cost according to the selected algorithm selected.
 <br> ![Output Screenshot](assets/gui_after.png) <br>
+A graph is drawn and saved in assets folder named "graph.png", the start node is colored in red, the goal nodes are colored in green, and the path to goal is colored in orange.
 <br> ![Output Graph](assets/graph.png) <br>
 
 ## Test Cases
