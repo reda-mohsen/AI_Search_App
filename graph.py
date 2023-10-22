@@ -16,6 +16,58 @@ import heapq
 import re
 
 
+def main():
+    try:
+        graph_edges = get_input_edges(input("Enter Edges as (node,node=weight+node,node=weight): "))
+        graph = get_graph(graph_edges)
+        start_node = input("Enter Start Node: ")
+        if not start_node:
+            # Display this message to user if did not input start node
+            raise ValueError("Empty start node")
+        get_goal_nodes = input("Enter Goal Nodes as (node, node, node, ...): ")
+        if get_goal_nodes:
+            goal_nodes = []
+            get_goal_nodes = get_goal_nodes.split(",")
+            for node in get_goal_nodes:
+                goal_nodes.append(node.strip())
+        else:
+            # Display this message to user if did not input goal nodes
+            raise ValueError("Empty goal nodes")
+        selected_search_algorithm = input(
+            "Select Search Algorithm From This List (BFS, DFS, UCS, Greedy, A*): ").strip()
+        if selected_search_algorithm == "BFS":
+            cost_to_goal, path_to_goal = bfs(graph, start_node, goal_nodes)
+            print(f"Path using {selected_search_algorithm} is {path_to_goal}")
+            print(f"Cost using {selected_search_algorithm} is {cost_to_goal}")
+            draw_graph(graph, start_node, goal_nodes, path_to_goal, cost_to_goal, selected_search_algorithm)
+        elif selected_search_algorithm == "DFS":
+            cost_to_goal, path_to_goal = dfs(graph, start_node, goal_nodes)
+            print(f"Path using {selected_search_algorithm} is {path_to_goal}")
+            print(f"Cost using {selected_search_algorithm} is {cost_to_goal}")
+            draw_graph(graph, start_node, goal_nodes, path_to_goal, cost_to_goal, selected_search_algorithm)
+        elif selected_search_algorithm == "UCS":
+            cost_to_goal, path_to_goal = ucs(graph, start_node, goal_nodes)
+            print(f"Path using {selected_search_algorithm} is {path_to_goal}")
+            print(f"Cost using {selected_search_algorithm} is {cost_to_goal}")
+            draw_graph(graph, start_node, goal_nodes, path_to_goal, cost_to_goal, selected_search_algorithm)
+        elif selected_search_algorithm == "Greedy":
+            cost_to_goal, path_to_goal = greedy_search(graph, start_node, goal_nodes)
+            print(f"Path using {selected_search_algorithm} is {path_to_goal}")
+            print(f"Cost using {selected_search_algorithm} is {cost_to_goal}")
+            draw_graph(graph, start_node, goal_nodes, path_to_goal, cost_to_goal, selected_search_algorithm)
+        elif selected_search_algorithm == "A*":
+            cost_to_goal, path_to_goal = a_star(graph, start_node, goal_nodes)
+            print(f"Path using {selected_search_algorithm} is {path_to_goal}")
+            print(f"Cost using {selected_search_algorithm} is {cost_to_goal}")
+            draw_graph(graph, start_node, goal_nodes, path_to_goal, cost_to_goal, selected_search_algorithm)
+        else:
+            raise ValueError("Invalid Search Algorithm")
+    except ValueError as value_err:
+        print(value_err)
+    except TypeError as type_err:
+        print(type_err)
+
+
 def get_input_edges(input_edges):
     """
      prompt the user for input of graph edges with weights, validate the input, and return a list of graph edges.
@@ -446,11 +498,11 @@ def draw_graph(graph: nx.Graph, start_node: str, goal_nodes: list, path: list, c
     edge_labels = nx.get_edge_attributes(graph, 'weight')
     # draw edge labels
     nx.draw_networkx_edge_labels(graph, pos, edge_labels=edge_labels)
-    # Construct a concise and informative title
-    title = f"{search_algo}\nPath: {' -> '.join(path)}\nCost: {cost}"
-    # Add the title as text annotation above the graph
-    plt.annotate(title, (0.2, 0.8), xycoords='axes fraction', fontsize=12, ha='center', fontweight="bold")
     # save graph figure
-    plt.savefig("graph.png")
+    plt.savefig("assets/graph.png")
     # show the figure
     plt.show()
+
+
+if __name__ == '__main__':
+    main()
