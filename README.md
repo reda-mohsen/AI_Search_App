@@ -6,6 +6,7 @@ This application implements various search algorithms to find the optimal path b
 * Depth-First Search (DFS)
 * Uniform-Cost Search (UCS)
 * Greedy Best-Frist Search
+* A* Best-First Search
 
 ## Installation 
 To use this project, you must have Python 3 installed on your system. If you do not have Python 3 installed, you can download it from the official website: https://www.python.org/downloads/
