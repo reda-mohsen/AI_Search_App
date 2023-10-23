@@ -1,7 +1,7 @@
 # AI Search Application
 
 ## Video Demo
-[AI Search Application Demo](URL_HERE)
+[AI Search Application Demo](https://youtu.be/phj-_2n4-Co)
 
 ## Introduction
 
